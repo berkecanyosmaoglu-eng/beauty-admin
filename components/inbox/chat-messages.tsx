@@ -1,7 +1,11 @@
 import { CheckCheck } from "lucide-react";
-import { messages } from "./inbox-data";
+import { InboxMessage } from "./inbox-types";
 
-export default function ChatMessages() {
+type ChatMessagesProps = {
+  messages: InboxMessage[];
+};
+
+export default function ChatMessages({ messages }: ChatMessagesProps) {
   return (
     <div className="relative flex-1 overflow-y-auto px-8 py-6">
       <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:26px_26px]" />

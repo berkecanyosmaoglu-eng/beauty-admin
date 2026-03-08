@@ -1,4 +1,16 @@
-export const chats = [
+import { InboxConfig } from "./inbox-types";
+
+export const whatsappConfig: InboxConfig = {
+  title: "WhatsApp",
+  subtitle: "16 aktif konuşma",
+  statusText: "Bot aktif",
+  accent: "green",
+  activeChannelLabel: "WhatsApp",
+  customerName: "Zeynep Kaya",
+  customerInitials: "ZK",
+  customerStatus: "Bot aktif",
+  quickActions: ["Fiyat listesi gönder", "Uygun saat öner", "İnsana devret"],
+  chats: [
     {
       name: "Zeynep Kaya",
       initials: "ZK",
@@ -39,9 +51,8 @@ export const chats = [
       tag: "Randevu adayı",
       channel: "WhatsApp",
     },
-  ];
-  
-  export const messages = [
+  ],
+  messages: [
     {
       from: "them",
       text: "Merhaba, cilt bakımı için fiyat alabilir miyim?",
@@ -57,10 +68,92 @@ export const chats = [
       text: "Size uygun saatlere göre randevu oluşturabilirim.",
       time: "11:03",
     },
-  ];
-  
-  export const quickActions = [
-    "Fiyat listesi gönder",
-    "Uygun saat öner",
-    "İnsana devret",
-  ];
+  ],
+  customerCard: {
+    customerName: "Zeynep Kaya",
+    customerPhone: "+90 5xx xxx xx xx",
+    labels: ["Yeni müşteri", "WhatsApp", "Fiyat soruyor"],
+    interestTitle: "Cilt Bakımı",
+    interestDescription: "Fiyat sorusu ile başladı",
+    nextAppointmentTitle: "Henüz randevu yok",
+    nextAppointmentDescription:
+      "Bot uygun saat önerirse rezervasyona dönme ihtimali yüksek.",
+    lastActivity: "11:01’de fiyat sordu. 11:03 itibarıyla bot randevu teklifine geçti.",
+    botNote:
+      "Kullanıcı fiyat ve hizmet bilgisi istiyor. Uygun saat gösterilirse rezervasyona dönme ihtimali yüksek.",
+  },
+};
+
+export const instagramConfig: InboxConfig = {
+  title: "Instagram",
+  subtitle: "9 aktif DM konuşması",
+  statusText: "DM akışı aktif",
+  accent: "pink",
+  activeChannelLabel: "Instagram",
+  customerName: "Dilan Aras",
+  customerInitials: "DA",
+  customerStatus: "İnsan devraldı",
+  quickActions: ["DM şablonu gönder", "Randevuya yönlendir", "Lead etiketi ekle"],
+  chats: [
+    {
+      name: "Dilan Aras",
+      initials: "DA",
+      message: "Protez tırnak fiyatı nedir acaba?",
+      time: "12:14",
+      unread: 1,
+      active: true,
+      tag: "DM lead",
+      channel: "Instagram",
+    },
+    {
+      name: "Selin K.",
+      initials: "SK",
+      message: "Story’den geldim, yarın boşluk var mı?",
+      time: "11:48",
+      unread: 0,
+      active: false,
+      tag: "Sıcak lead",
+      channel: "Instagram",
+    },
+    {
+      name: "Tuğçe Nur",
+      initials: "TN",
+      message: "Kalıcı oje ne kadar kalıyor?",
+      time: "11:19",
+      unread: 2,
+      active: false,
+      tag: "Bilgi istiyor",
+      channel: "Instagram",
+    },
+  ],
+  messages: [
+    {
+      from: "them",
+      text: "Merhaba, protez tırnak fiyatı nedir acaba?",
+      time: "12:14",
+    },
+    {
+      from: "me",
+      text: "Merhaba, protez tırnak için güncel fiyatlarımızı paylaşabilirim.",
+      time: "12:15",
+    },
+    {
+      from: "me",
+      text: "İsterseniz uygun gün ve saatlere göre direkt randevu da oluşturabiliriz.",
+      time: "12:16",
+    },
+  ],
+  customerCard: {
+    customerName: "Dilan Aras",
+    customerPhone: "@dilanaras",
+    labels: ["Instagram", "DM lead", "Protez tırnak"],
+    interestTitle: "Protez Tırnak",
+    interestDescription: "Reklamdan geldi, fiyat soruyor",
+    nextAppointmentTitle: "Henüz randevu yok",
+    nextAppointmentDescription:
+      "DM konuşması rezervasyona çevrilebilir, yüksek potansiyel.",
+    lastActivity: "12:14’te fiyat sordu, 12:16’da randevu yönlendirmesi yapıldı.",
+    botNote:
+      "Kullanıcı satın almaya yakın görünüyor. Uygun saat ve kampanya bilgisi verilirse dönüşüm ihtimali yüksek.",
+  },
+};

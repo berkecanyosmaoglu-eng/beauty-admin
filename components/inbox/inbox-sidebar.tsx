@@ -1,17 +1,26 @@
 import { Search } from "lucide-react";
-import { chats } from "./inbox-data";
+import { InboxConfig } from "./inbox-types";
 
-export default function InboxSidebar() {
+type InboxSidebarProps = {
+  config: InboxConfig;
+};
+
+export default function InboxSidebar({ config }: InboxSidebarProps) {
+  const accentClass =
+    config.accent === "pink"
+      ? "bg-pink-500 text-white"
+      : "bg-emerald-400 text-[#041018]";
+
   return (
     <div className="flex w-[360px] shrink-0 flex-col border-r border-white/5 bg-[#0d1726]">
       <div className="border-b border-white/5 px-5 py-5">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold tracking-tight text-white">WhatsApp</h1>
-            <p className="mt-1 text-sm text-zinc-400">16 aktif konuşma</p>
+            <h1 className="text-xl font-semibold tracking-tight text-white">{config.title}</h1>
+            <p className="mt-1 text-sm text-zinc-400">{config.subtitle}</p>
           </div>
-          <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-400">
-            Bot aktif
+          <span className="rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-zinc-200">
+            {config.statusText}
           </span>
         </div>
 
@@ -24,21 +33,21 @@ export default function InboxSidebar() {
         </div>
 
         <div className="mt-4 flex gap-2">
-          <button className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-semibold text-[#041018]">
+          <button className={`rounded-full px-4 py-2 text-xs font-semibold ${accentClass}`}>
             Tümü
           </button>
           <button className="rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-zinc-300">
             Okunmamış
           </button>
           <button className="rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-zinc-300">
-            Bot kapalı
+            Etiketli
           </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-3 py-3">
         <div className="space-y-2">
-          {chats.map((chat) => (
+          {config.chats.map((chat) => (
             <div
               key={chat.name}
               className={`cursor-pointer rounded-2xl border p-3 transition ${
