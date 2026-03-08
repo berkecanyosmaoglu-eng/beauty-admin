@@ -14,39 +14,48 @@ const chats = [
     message: "Yarın için uygun saat var mı?",
     time: "10:42",
     unread: 0,
-    active: false,
   },
   {
     name: "Berna Demir",
     message: "Kaş laminasyonu ne kadar sürüyor?",
     time: "10:16",
     unread: 1,
-    active: false,
   },
   {
     name: "Esra Çelik",
     message: "Cumartesi boşluk var mı?",
     time: "09:58",
     unread: 0,
-    active: false,
+  },
+  {
+    name: "Seda Yılmaz",
+    message: "Fiyat listesi atabilir misiniz?",
+    time: "09:31",
+    unread: 0,
+  },
+  {
+    name: "Duygu Şahin",
+    message: "Randevumu 1 saat ileri alabilir miyiz?",
+    time: "Dün",
+    unread: 0,
   },
 ];
 
 const messages = [
   {
     from: "them",
-    text: "Merhaba, cilt bakımı için fiyat alabilir miyim?",
+    text: "Merhaba 5-6 yaş 2.dönem için günlük ve aylık plan gerekiyor bana. Fiyat bilgisi verir misiniz?",
     time: "11:01",
   },
   {
     from: "me",
-    text: "Merhaba, elbette. Cilt bakımı için güncel fiyatlarımızı paylaşabilirim. İsterseniz uygun saatlere göre de yardımcı olayım.",
+    text: "Merhaba, fiyat ve paket seçeneklerini sistemimiz üzerinden görüntüleyebilirsiniz. İsterseniz size uygun hizmeti birlikte de seçebiliriz.",
     time: "11:02",
   },
   {
     from: "me",
-    text: "Size en uygun gün hangisi olur?",
-    time: "11:03",
+    text: "Ayrıca isterseniz direkt uygun saatlere göre size randevu oluşturabilirim.",
+    time: "11:02",
   },
 ];
 
@@ -217,6 +226,29 @@ export default function WhatsAppPage() {
               <p className="text-xs text-zinc-400">Yaklaşan İşlem</p>
               <p className="mt-2 text-base font-semibold">Henüz randevu yok</p>
               <p className="mt-1 text-sm text-zinc-400">Bot uygun saat önermeye hazır</p>
+            </div>
+
+            <div className="rounded-3xl border border-white/5 bg-white/5 p-4">
+              <p className="text-xs text-zinc-400">Etiketler</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span className="rounded-full bg-cyan-400/10 px-3 py-1 text-xs text-cyan-300">
+                  Yeni müşteri
+                </span>
+                <span className="rounded-full bg-violet-400/10 px-3 py-1 text-xs text-violet-300">
+                  WhatsApp
+                </span>
+                <span className="rounded-full bg-amber-400/10 px-3 py-1 text-xs text-amber-300">
+                  Fiyat soruyor
+                </span>
+              </div>
+            </div>
+
+            <div className="rounded-3xl border border-white/5 bg-white/5 p-4">
+              <p className="text-xs text-zinc-400">Bot Notu</p>
+              <p className="mt-2 text-sm leading-6 text-zinc-300">
+                Kullanıcı hizmet ve fiyat bilgisi istiyor. Uygun saat gösterilirse rezervasyona
+                dönme ihtimali yüksek.
+              </p>
             </div>
           </div>
         </div>
