@@ -1,0 +1,89 @@
+import { Search } from "lucide-react";
+import { chats } from "./inbox-data";
+
+export default function InboxSidebar() {
+  return (
+    <div className="flex w-[360px] shrink-0 flex-col border-r border-white/5 bg-[#0d1726]">
+      <div className="border-b border-white/5 px-5 py-5">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-white">WhatsApp</h1>
+            <p className="mt-1 text-sm text-zinc-400">16 aktif konuşma</p>
+          </div>
+          <span className="rounded-full bg-emerald-500/15 px-3 py-1 text-xs font-medium text-emerald-400">
+            Bot aktif
+          </span>
+        </div>
+
+        <div className="mt-4 flex h-11 items-center rounded-2xl border border-white/5 bg-[#0a1320] px-3">
+          <Search size={16} className="text-zinc-500" />
+          <input
+            placeholder="İsim veya numara ara..."
+            className="ml-2 w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-500"
+          />
+        </div>
+
+        <div className="mt-4 flex gap-2">
+          <button className="rounded-full bg-emerald-400 px-4 py-2 text-xs font-semibold text-[#041018]">
+            Tümü
+          </button>
+          <button className="rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-zinc-300">
+            Okunmamış
+          </button>
+          <button className="rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-zinc-300">
+            Bot kapalı
+          </button>
+        </div>
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-3 py-3">
+        <div className="space-y-2">
+          {chats.map((chat) => (
+            <div
+              key={chat.name}
+              className={`cursor-pointer rounded-2xl border p-3 transition ${
+                chat.active
+                  ? "border-cyan-400/30 bg-cyan-400/10 shadow-[0_0_0_1px_rgba(34,211,238,0.08)]"
+                  : "border-transparent hover:bg-white/5"
+              }`}
+            >
+              <div className="flex gap-3">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-zinc-700 to-zinc-900 text-sm font-semibold text-white">
+                  {chat.initials}
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-semibold text-white">{chat.name}</p>
+                      <div className="mt-1 flex flex-wrap gap-1.5">
+                        <span className="rounded-full bg-violet-500/15 px-2 py-0.5 text-[10px] text-violet-300">
+                          {chat.channel}
+                        </span>
+                        <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] text-amber-300">
+                          {chat.tag}
+                        </span>
+                      </div>
+                    </div>
+
+                    <span className="text-[11px] text-zinc-500">{chat.time}</span>
+                  </div>
+
+                  <div className="mt-2 flex items-center justify-between gap-2">
+                    <p className="truncate text-xs text-zinc-400">{chat.message}</p>
+
+                    {chat.unread > 0 ? (
+                      <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-400 px-1 text-[10px] font-bold text-[#041018]">
+                        {chat.unread}
+                      </span>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
