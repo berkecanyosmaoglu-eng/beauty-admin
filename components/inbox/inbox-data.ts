@@ -1,6 +1,7 @@
 import { InboxConfig } from "./inbox-types";
 
 export const whatsappConfig: InboxConfig = {
+  variant: "whatsapp",
   title: "WhatsApp",
   subtitle: "16 aktif konuşma",
   statusText: "Bot aktif",
@@ -85,8 +86,9 @@ export const whatsappConfig: InboxConfig = {
 };
 
 export const instagramConfig: InboxConfig = {
-  title: "Instagram",
-  subtitle: "9 aktif DM konuşması",
+  variant: "instagram",
+  title: "Instagram DM",
+  subtitle: "9 aktif mesaj",
   statusText: "DM akışı aktif",
   accent: "pink",
   activeChannelLabel: "Instagram",
@@ -123,6 +125,16 @@ export const instagramConfig: InboxConfig = {
       unread: 2,
       active: false,
       tag: "Bilgi istiyor",
+      channel: "Instagram",
+    },
+    {
+      name: "Buse A.",
+      initials: "BA",
+      message: "Reels’te gördüm, fiyat alabilir miyim?",
+      time: "10:55",
+      unread: 0,
+      active: false,
+      tag: "Reels lead",
       channel: "Instagram",
     },
   ],

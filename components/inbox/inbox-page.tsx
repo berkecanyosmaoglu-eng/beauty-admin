@@ -11,13 +11,13 @@ type InboxPageProps = {
 
 export default function InboxPage({ config }: InboxPageProps) {
   return (
-    <div className="flex h-screen bg-[#08111d] text-white">
+    <div className="flex h-[calc(100vh-0px)] bg-[#08111d] text-white overflow-hidden">
       <InboxSidebar config={config} />
 
       <div className="flex min-w-0 flex-1 flex-col bg-[#07111f]">
         <ChatHeader config={config} />
-        <ChatMessages messages={config.messages} />
-        <ChatComposer />
+        <ChatMessages messages={config.messages} config={config} />
+        <ChatComposer config={config} />
       </div>
 
       <CustomerPanel config={config} />

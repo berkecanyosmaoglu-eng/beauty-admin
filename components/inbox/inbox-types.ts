@@ -27,7 +27,10 @@ export type InboxChat = {
     botNote: string;
   };
   
+  export type InboxVariant = "whatsapp" | "instagram";
+  
   export type InboxConfig = {
+    variant: InboxVariant;
     title: string;
     subtitle: string;
     statusText: string;
