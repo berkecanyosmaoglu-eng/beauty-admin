@@ -12,15 +12,15 @@ export default function ChatComposer({ config }: ChatComposerProps) {
       : "bg-gradient-to-br from-emerald-400 to-emerald-500 text-[#041018]";
 
   return (
-    <div className="border-t border-white/5 bg-[#0d1726] px-4 md:px-6 py-4">
+    <div className="border-t border-white/5 bg-[#0d1726] px-4 py-4 md:px-6">
       <div className="mb-3 flex flex-wrap gap-2 overflow-x-auto">
-        <button className="rounded-full bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap">
+        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10">
           Hızlı cevap
         </button>
-        <button className="rounded-full bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap">
+        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10">
           Şablon ekle
         </button>
-        <button className="rounded-full bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10 whitespace-nowrap">
+        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-xs text-zinc-300 hover:bg-white/10">
           Not düş
         </button>
       </div>

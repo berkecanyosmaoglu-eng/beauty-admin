@@ -1,4 +1,5 @@
 export type InboxChat = {
+    id: string;
     name: string;
     initials: string;
     message: string;

@@ -13,6 +13,7 @@ export const whatsappConfig: InboxConfig = {
   quickActions: ["Fiyat listesi gönder", "Uygun saat öner", "İnsana devret"],
   chats: [
     {
+      id: "chat-zeynep",
       name: "Zeynep Kaya",
       initials: "ZK",
       message: "Merhaba, cilt bakımı için fiyat alabilir miyim?",
@@ -23,6 +24,7 @@ export const whatsappConfig: InboxConfig = {
       channel: "WhatsApp",
     },
     {
+      id: "chat-merve",
       name: "Merve Aydın",
       initials: "MA",
       message: "Yarın için uygun saat var mı?",
@@ -33,6 +35,7 @@ export const whatsappConfig: InboxConfig = {
       channel: "WhatsApp",
     },
     {
+      id: "chat-berna",
       name: "Berna Demir",
       initials: "BD",
       message: "Kaş laminasyonu ne kadar sürüyor?",
@@ -43,6 +46,7 @@ export const whatsappConfig: InboxConfig = {
       channel: "WhatsApp",
     },
     {
+      id: "chat-esra",
       name: "Esra Çelik",
       initials: "EÇ",
       message: "Cumartesi boşluk var mı?",
@@ -98,6 +102,7 @@ export const instagramConfig: InboxConfig = {
   quickActions: ["DM şablonu gönder", "Randevuya yönlendir", "Lead etiketi ekle"],
   chats: [
     {
+      id: "ig-dilan",
       name: "Dilan Aras",
       initials: "DA",
       message: "Protez tırnak fiyatı nedir acaba?",
@@ -108,6 +113,7 @@ export const instagramConfig: InboxConfig = {
       channel: "Instagram",
     },
     {
+      id: "ig-selin",
       name: "Selin K.",
       initials: "SK",
       message: "Story’den geldim, yarın boşluk var mı?",
@@ -118,6 +124,7 @@ export const instagramConfig: InboxConfig = {
       channel: "Instagram",
     },
     {
+      id: "ig-tugce",
       name: "Tuğçe Nur",
       initials: "TN",
       message: "Kalıcı oje ne kadar kalıyor?",
@@ -128,6 +135,7 @@ export const instagramConfig: InboxConfig = {
       channel: "Instagram",
     },
     {
+      id: "ig-buse",
       name: "Buse A.",
       initials: "BA",
       message: "Reels’te gördüm, fiyat alabilir miyim?",

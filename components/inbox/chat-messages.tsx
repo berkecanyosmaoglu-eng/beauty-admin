@@ -13,7 +13,7 @@ export default function ChatMessages({ messages, config }: ChatMessagesProps) {
       : "rounded-br-md bg-gradient-to-br from-emerald-400 to-emerald-500 text-[#041018]";
 
   return (
-    <div className="relative flex-1 overflow-y-auto px-4 md:px-8 py-6">
+    <div className="relative flex-1 overflow-y-auto px-4 py-6 md:px-8">
       <div className="pointer-events-none absolute inset-0 opacity-[0.05] [background-image:radial-gradient(circle_at_1px_1px,white_1px,transparent_0)] [background-size:26px_26px]" />
 
       <div className="relative mb-6 flex justify-center">
