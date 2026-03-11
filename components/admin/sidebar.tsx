@@ -34,20 +34,22 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-screen w-[236px] shrink-0 flex-col border-r border-slate-200 bg-[#f6f7fb]">
-      <div className="flex h-18 items-center px-5 pt-5">
+    <aside className="flex h-screen w-[228px] shrink-0 flex-col border-r border-slate-200 bg-[#f6f7fb]">
+      <div className="flex items-center px-5 pt-5 pb-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-sm font-bold text-white shadow-[0_8px_20px_rgba(168,85,247,0.22)]">
             B
           </div>
           <div>
-            <p className="text-[17px] font-semibold tracking-tight text-slate-900">Beauty Admin</p>
+            <p className="text-[16px] font-semibold tracking-tight text-slate-900">
+              Beauty Admin
+            </p>
             <p className="text-[11px] text-slate-500">WhatsApp API</p>
           </div>
         </div>
       </div>
 
-      <nav className="flex-1 px-3 py-4">
+      <nav className="flex-1 px-3 py-2">
         <div className="space-y-1">
           {menuItems.map((item) => {
             const Icon = item.icon;
@@ -58,17 +60,17 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
                 key={item.href}
                 href={item.href}
                 onClick={onNavigate}
-                className={`group flex h-10 items-center gap-3 rounded-2xl px-3 text-[14px] font-medium transition-all ${
+                className={`group flex h-10 items-center gap-3 rounded-2xl px-3 text-[13px] font-medium transition-all ${
                   active
-                    ? "bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white shadow-[0_10px_24px_rgba(217,70,239,0.18)]"
-                    : "text-slate-700 hover:bg-white hover:text-slate-950 hover:shadow-[0_8px_18px_rgba(15,23,42,0.05)]"
+                    ? "bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white shadow-[0_10px_20px_rgba(217,70,239,0.16)]"
+                    : "text-slate-700 hover:bg-white hover:text-slate-950"
                 }`}
               >
                 <Icon
-                  size={17}
-                  className={active ? "opacity-100" : "opacity-80 group-hover:opacity-100"}
+                  size={16}
+                  className={active ? "opacity-100" : "opacity-90 group-hover:opacity-100"}
                 />
-                <span>{item.label}</span>
+                <span className="truncate">{item.label}</span>
               </Link>
             );
           })}
@@ -82,7 +84,9 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
               AA
             </div>
             <div className="min-w-0">
-              <p className="truncate text-[13px] font-semibold text-slate-900">Aydın Acar</p>
+              <p className="truncate text-[13px] font-semibold text-slate-900">
+                Aydın Acar
+              </p>
               <p className="text-[12px] font-medium text-emerald-600">1000 kredi</p>
             </div>
           </div>
