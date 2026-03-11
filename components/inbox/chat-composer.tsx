@@ -1,28 +1,26 @@
 import { Image as ImageIcon, Paperclip, Send } from "lucide-react";
 import type { InboxConfig } from "./inbox-types";
+import Button from "../ui/button";
 
 type ChatComposerProps = {
   config: InboxConfig;
 };
 
 export default function ChatComposer({ config }: ChatComposerProps) {
-  const sendButtonClass =
-    config.variant === "instagram"
-      ? "bg-gradient-to-br from-fuchsia-500 via-pink-500 to-orange-400 text-white"
-      : "bg-gradient-to-br from-emerald-400 to-emerald-500 text-[#041018]";
+  const actionVariant = config.variant === "instagram" ? "ig" : "wa";
 
   return (
     <div className="border-t border-white/6 bg-[#0d1726] px-3 py-3 md:px-4">
       <div className="mb-2.5 flex flex-wrap gap-2 overflow-x-auto">
-        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 transition hover:bg-white/10">
+        <Button size="sm" variant="ghost">
           Hızlı cevap
-        </button>
-        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 transition hover:bg-white/10">
+        </Button>
+        <Button size="sm" variant="ghost">
           Şablon ekle
-        </button>
-        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 transition hover:bg-white/10">
+        </Button>
+        <Button size="sm" variant="ghost">
           Not düş
-        </button>
+        </Button>
       </div>
 
       <div className="flex items-center gap-3 rounded-[18px] border border-white/6 bg-[#0a1320] px-3 py-3">
@@ -41,9 +39,9 @@ export default function ChatComposer({ config }: ChatComposerProps) {
           className="w-full bg-transparent text-[14px] text-white outline-none placeholder:text-zinc-500"
         />
 
-        <button className={`rounded-xl p-2.5 transition hover:opacity-90 ${sendButtonClass}`}>
+        <Button variant={actionVariant} size="sm" className="w-10 px-0">
           <Send size={14} />
-        </button>
+        </Button>
       </div>
     </div>
   );
