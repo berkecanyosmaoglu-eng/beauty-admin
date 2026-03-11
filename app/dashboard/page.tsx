@@ -105,68 +105,52 @@ const activities = [
 export default function DashboardPage() {
   return (
     <AppShell>
-      <div className="min-h-screen bg-[#08111d] px-4 py-6 text-white md:px-6 xl:px-8">
-        <div className="grid gap-6 xl:grid-cols-[1.5fr_0.9fr]">
-          <div className="rounded-[28px] border border-white/5 bg-[linear-gradient(135deg,rgba(34,211,238,0.08),rgba(217,70,239,0.06),rgba(255,255,255,0.03))] p-6 shadow-[0_20px_80px_rgba(0,0,0,0.25)]">
+      <div className="min-h-screen px-5 py-6 text-white md:px-7 xl:px-8">
+        <div className="grid gap-6 xl:grid-cols-[1.55fr_0.95fr]">
+          <div className="rounded-[32px] border border-white/8 bg-[linear-gradient(135deg,rgba(56,189,248,0.09),rgba(217,70,239,0.06),rgba(255,255,255,0.03))] p-7 shadow-[0_20px_60px_rgba(0,0,0,0.26)]">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div className="max-w-2xl">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-zinc-300">
+                <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-300">
                   <Sparkles size={14} />
                   Beauty SaaS Control Center
                 </div>
 
-                <h1 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
+                <h1 className="mt-5 ui-title max-w-[720px]">
                   Günün operasyonu güçlü gidiyor reis.
                 </h1>
 
-                <p className="mt-3 max-w-xl text-sm leading-7 text-zinc-300 md:text-base">
+                <p className="mt-4 max-w-xl text-[15px] leading-8 text-zinc-300">
                   WhatsApp, Instagram ve rezervasyon akışın tek panelden yönetiliyor.
                   Bugün dönüşüm oranı yükselmiş görünüyor; sıcak lead’leri hızlıca
                   randevuya çevirmen yeterli.
                 </p>
 
-                <div className="mt-5 flex flex-wrap gap-3">
-                  <button className="rounded-2xl bg-white px-4 py-3 text-sm font-semibold text-[#08111d] transition hover:opacity-90">
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <button className="ui-btn-primary bg-white text-[#08111d] shadow-[0_10px_28px_rgba(255,255,255,0.10)]">
                     Konuşmaları görüntüle
                   </button>
-                  <button className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10">
+                  <button className="ui-btn-secondary">
                     Bugünkü randevular
                   </button>
                 </div>
               </div>
 
-              <div className="grid min-w-[260px] grid-cols-2 gap-3">
-                <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
-                  <p className="text-xs text-zinc-400">Cevap hızı</p>
-                  <p className="mt-2 text-2xl font-semibold">1.8 dk</p>
-                  <p className="mt-1 text-xs text-emerald-400">İyi seviyede</p>
-                </div>
-                <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
-                  <p className="text-xs text-zinc-400">Aktif bot</p>
-                  <p className="mt-2 text-2xl font-semibold">2 kanal</p>
-                  <p className="mt-1 text-xs text-fuchsia-400">WA + IG açık</p>
-                </div>
-                <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
-                  <p className="text-xs text-zinc-400">Bugünkü satış</p>
-                  <p className="mt-2 text-2xl font-semibold">₺18.400</p>
-                  <p className="mt-1 text-xs text-cyan-400">Tahmini gelir</p>
-                </div>
-                <div className="rounded-3xl border border-white/10 bg-black/10 p-4">
-                  <p className="text-xs text-zinc-400">Boş slot</p>
-                  <p className="mt-2 text-2xl font-semibold">9</p>
-                  <p className="mt-1 text-xs text-amber-400">Bugün kalan</p>
-                </div>
+              <div className="grid min-w-[270px] grid-cols-2 gap-3">
+                <MiniStat label="Cevap hızı" value="1.8 dk" note="İyi seviyede" noteClass="text-emerald-400" />
+                <MiniStat label="Aktif bot" value="2 kanal" note="WA + IG açık" noteClass="text-fuchsia-400" />
+                <MiniStat label="Bugünkü satış" value="₺18.400" note="Tahmini gelir" noteClass="text-cyan-400" />
+                <MiniStat label="Boş slot" value="9" note="Bugün kalan" noteClass="text-amber-400" />
               </div>
             </div>
           </div>
 
-          <div className="rounded-[28px] border border-white/5 bg-white/5 p-6">
+          <section className="ui-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-400">Kanal Performansı</p>
-                <h2 className="mt-1 text-xl font-semibold">Bugünün akışı</h2>
+                <p className="ui-subtitle">Kanal Performansı</p>
+                <h2 className="mt-1 ui-section-title">Bugünün akışı</h2>
               </div>
-              <button className="rounded-xl bg-white/5 p-2 text-zinc-300">
+              <button className="rounded-2xl border border-white/8 bg-white/5 p-2.5 text-zinc-300 transition hover:bg-white/10">
                 <ArrowUpRight size={18} />
               </button>
             </div>
@@ -177,43 +161,40 @@ export default function DashboardPage() {
                 return (
                   <div
                     key={channel.name}
-                    className="rounded-3xl border border-white/5 bg-[#0d1726] p-4"
+                    className="rounded-[24px] border border-white/6 bg-[#0d1726] p-4 shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
                   >
                     <div className="flex items-start gap-4">
                       <div
-                        className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${channel.accent} text-white`}
+                        className={`flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br ${channel.accent} text-white shadow-[0_10px_24px_rgba(0,0,0,0.18)]`}
                       >
                         <Icon size={18} />
                       </div>
 
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center justify-between gap-3">
-                          <p className="font-semibold">{channel.name}</p>
+                          <p className="font-semibold tracking-tight">{channel.name}</p>
                           <span className="text-xs text-zinc-400">{channel.value}</span>
                         </div>
-                        <p className="mt-1 text-sm text-zinc-400">{channel.detail}</p>
+                        <p className="mt-1.5 text-sm text-zinc-400">{channel.detail}</p>
                       </div>
                     </div>
                   </div>
                 );
               })}
             </div>
-          </div>
+          </section>
         </div>
 
         <div className="mt-6 grid gap-6 xl:grid-cols-4">
           {kpis.map((item) => {
             const Icon = item.icon;
             return (
-              <div
-                key={item.title}
-                className="rounded-[26px] border border-white/5 bg-white/5 p-5"
-              >
+              <div key={item.title} className="ui-card p-5">
                 <div className="flex items-center justify-between">
-                  <div className="rounded-2xl bg-white/5 p-3 text-zinc-300">
+                  <div className="rounded-2xl border border-white/6 bg-white/5 p-3 text-zinc-300">
                     <Icon size={18} />
                   </div>
-                  <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs text-emerald-400">
+                  <span className="rounded-full bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-400">
                     {item.change}
                   </span>
                 </div>
@@ -227,11 +208,11 @@ export default function DashboardPage() {
         </div>
 
         <div className="mt-6 grid gap-6 xl:grid-cols-[1.2fr_0.9fr_0.9fr]">
-          <div className="rounded-[28px] border border-white/5 bg-white/5 p-6">
+          <section className="ui-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-400">Yaklaşan Randevular</p>
-                <h2 className="mt-1 text-xl font-semibold">Bugün sıradakiler</h2>
+                <p className="ui-subtitle">Yaklaşan Randevular</p>
+                <h2 className="mt-1 ui-section-title">Bugün sıradakiler</h2>
               </div>
               <div className="rounded-full bg-white/5 px-3 py-1 text-xs text-zinc-300">
                 {appointments.length} kayıt
@@ -242,64 +223,63 @@ export default function DashboardPage() {
               {appointments.map((item) => (
                 <div
                   key={`${item.time}-${item.customer}`}
-                  className="flex flex-col gap-3 rounded-3xl border border-white/5 bg-[#0d1726] p-4 md:flex-row md:items-center md:justify-between"
+                  className="rounded-[24px] border border-white/6 bg-[#0d1726] p-4 shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="rounded-2xl bg-cyan-400/10 px-3 py-2 text-sm font-semibold text-cyan-300">
-                      {item.time}
+                  <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="rounded-2xl bg-cyan-400/10 px-3 py-2 text-sm font-semibold text-cyan-300">
+                        {item.time}
+                      </div>
+
+                      <div>
+                        <p className="font-semibold">{item.customer}</p>
+                        <p className="mt-1 text-sm text-zinc-400">
+                          {item.service} · {item.staff}
+                        </p>
+                      </div>
                     </div>
 
-                    <div>
-                      <p className="font-semibold">{item.customer}</p>
-                      <p className="mt-1 text-sm text-zinc-400">
-                        {item.service} · {item.staff}
-                      </p>
-                    </div>
+                    <button className="ui-btn-secondary px-4 py-2 text-sm">
+                      Detay
+                    </button>
                   </div>
-
-                  <button className="rounded-2xl bg-white/5 px-4 py-2 text-sm text-zinc-300 transition hover:bg-white/10">
-                    Detay
-                  </button>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="rounded-[28px] border border-white/5 bg-white/5 p-6">
+          <section className="ui-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-400">Canlı Konuşmalar</p>
-                <h2 className="mt-1 text-xl font-semibold">Anlık durum</h2>
+                <p className="ui-subtitle">Canlı Konuşmalar</p>
+                <h2 className="mt-1 ui-section-title">Anlık durum</h2>
               </div>
-              <div className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs text-emerald-400">
+              <div className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-400">
                 canlı
               </div>
             </div>
 
             <div className="mt-5 space-y-3">
               {liveConversations.map((item) => (
-                <div
-                  key={item.name}
-                  className="rounded-3xl border border-white/5 bg-[#0d1726] p-4"
-                >
+                <div key={item.name} className="rounded-[24px] border border-white/6 bg-[#0d1726] p-4">
                   <div className="flex items-center justify-between gap-3">
                     <p className="font-semibold">{item.name}</p>
                     <span className="rounded-full bg-white/5 px-2.5 py-1 text-[11px] text-zinc-300">
                       {item.channel}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm text-zinc-400">{item.text}</p>
-                  <p className="mt-3 text-xs text-amber-300">{item.status}</p>
+                  <p className="mt-2 text-sm leading-6 text-zinc-400">{item.text}</p>
+                  <p className="mt-3 text-xs font-medium text-amber-300">{item.status}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="rounded-[28px] border border-white/5 bg-white/5 p-6">
+          <section className="ui-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-400">Son Aktiviteler</p>
-                <h2 className="mt-1 text-xl font-semibold">Sistem hareketleri</h2>
+                <p className="ui-subtitle">Son Aktiviteler</p>
+                <h2 className="mt-1 ui-section-title">Sistem hareketleri</h2>
               </div>
               <div className="rounded-full bg-white/5 px-3 py-1 text-xs text-zinc-300">
                 son 1 saat
@@ -308,10 +288,7 @@ export default function DashboardPage() {
 
             <div className="mt-5 space-y-3">
               {activities.map((item) => (
-                <div
-                  key={item}
-                  className="rounded-3xl border border-white/5 bg-[#0d1726] p-4"
-                >
+                <div key={item} className="rounded-[24px] border border-white/6 bg-[#0d1726] p-4">
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 text-emerald-400">
                       <CheckCircle2 size={16} />
@@ -321,15 +298,15 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         </div>
 
         <div className="mt-6 grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-          <div className="rounded-[28px] border border-white/5 bg-white/5 p-6">
+          <section className="ui-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-400">Haftalık Trend</p>
-                <h2 className="mt-1 text-xl font-semibold">Konuşma → randevu akışı</h2>
+                <p className="ui-subtitle">Haftalık Trend</p>
+                <h2 className="mt-1 ui-section-title">Konuşma → randevu akışı</h2>
               </div>
               <div className="rounded-full bg-white/5 px-3 py-1 text-xs text-zinc-300">
                 son 7 gün
@@ -340,7 +317,7 @@ export default function DashboardPage() {
               {[42, 56, 38, 71, 63, 84, 67].map((n, i) => (
                 <div key={i} className="flex flex-1 flex-col items-center gap-3">
                   <div
-                    className="w-full rounded-t-[20px] bg-gradient-to-t from-fuchsia-500 via-cyan-400 to-emerald-400"
+                    className="w-full rounded-t-[22px] bg-gradient-to-t from-fuchsia-500 via-cyan-400 to-emerald-400 shadow-[0_10px_20px_rgba(0,0,0,0.20)]"
                     style={{ height: `${n * 2.4}px` }}
                   />
                   <span className="text-xs text-zinc-500">
@@ -349,13 +326,13 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="rounded-[28px] border border-white/5 bg-white/5 p-6">
+          <section className="ui-card p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-zinc-400">Bugünkü Odak</p>
-                <h2 className="mt-1 text-xl font-semibold">Öne çıkan öneriler</h2>
+                <p className="ui-subtitle">Bugünkü Odak</p>
+                <h2 className="mt-1 ui-section-title">Öne çıkan öneriler</h2>
               </div>
               <div className="rounded-full bg-amber-500/10 px-3 py-1 text-xs text-amber-300">
                 dikkat
@@ -363,51 +340,77 @@ export default function DashboardPage() {
             </div>
 
             <div className="mt-5 space-y-4">
-              <div className="rounded-3xl border border-fuchsia-400/10 bg-fuchsia-500/5 p-4">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-2xl bg-fuchsia-500/15 p-3 text-fuchsia-300">
-                    <Instagram size={18} />
-                  </div>
-                  <div>
-                    <p className="font-semibold">Instagram lead’leri sıcak</p>
-                    <p className="mt-1 text-sm text-zinc-400">
-                      Story ve reklamdan gelen DM’ler hızlı dönüşüm verebilir.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-3xl border border-emerald-400/10 bg-emerald-500/5 p-4">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-2xl bg-emerald-500/15 p-3 text-emerald-300">
-                    <Clock3 size={18} />
-                  </div>
-                  <div>
-                    <p className="font-semibold">Boş slotları doldur</p>
-                    <p className="mt-1 text-sm text-zinc-400">
-                      16:00 sonrası boşluklar için bot öneri akışı tetiklenebilir.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="rounded-3xl border border-cyan-400/10 bg-cyan-500/5 p-4">
-                <div className="flex items-center gap-3">
-                  <div className="rounded-2xl bg-cyan-500/15 p-3 text-cyan-300">
-                    <ArrowUpRight size={18} />
-                  </div>
-                  <div>
-                    <p className="font-semibold">Dönüşüm yukarı gidiyor</p>
-                    <p className="mt-1 text-sm text-zinc-400">
-                      Son 3 günde tekliften randevuya geçiş artmış durumda.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <FocusCard
+                icon={<Instagram size={18} />}
+                title="Instagram lead’leri sıcak"
+                text="Story ve reklamdan gelen DM’ler hızlı dönüşüm verebilir."
+                wrapper="border-fuchsia-400/10 bg-fuchsia-500/5"
+                iconWrap="bg-fuchsia-500/15 text-fuchsia-300"
+              />
+              <FocusCard
+                icon={<Clock3 size={18} />}
+                title="Boş slotları doldur"
+                text="16:00 sonrası boşluklar için bot öneri akışı tetiklenebilir."
+                wrapper="border-emerald-400/10 bg-emerald-500/5"
+                iconWrap="bg-emerald-500/15 text-emerald-300"
+              />
+              <FocusCard
+                icon={<ArrowUpRight size={18} />}
+                title="Dönüşüm yukarı gidiyor"
+                text="Son 3 günde tekliften randevuya geçiş artmış durumda."
+                wrapper="border-cyan-400/10 bg-cyan-500/5"
+                iconWrap="bg-cyan-500/15 text-cyan-300"
+              />
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </AppShell>
+  );
+}
+
+function MiniStat({
+  label,
+  value,
+  note,
+  noteClass,
+}: {
+  label: string;
+  value: string;
+  note: string;
+  noteClass: string;
+}) {
+  return (
+    <div className="rounded-[26px] border border-white/10 bg-black/10 p-4 backdrop-blur-sm">
+      <p className="text-xs text-zinc-400">{label}</p>
+      <p className="mt-2 text-[2rem] font-semibold tracking-tight">{value}</p>
+      <p className={`mt-1 text-xs font-medium ${noteClass}`}>{note}</p>
+    </div>
+  );
+}
+
+function FocusCard({
+  icon,
+  title,
+  text,
+  wrapper,
+  iconWrap,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  text: string;
+  wrapper: string;
+  iconWrap: string;
+}) {
+  return (
+    <div className={`rounded-[24px] border p-4 ${wrapper}`}>
+      <div className="flex items-center gap-3">
+        <div className={`rounded-2xl p-3 ${iconWrap}`}>{icon}</div>
+        <div>
+          <p className="font-semibold">{title}</p>
+          <p className="mt-1 text-sm leading-6 text-zinc-400">{text}</p>
+        </div>
+      </div>
+    </div>
   );
 }
