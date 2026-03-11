@@ -34,7 +34,7 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-screen w-[228px] shrink-0 flex-col border-r border-slate-200 bg-[#f6f7fb]">
+    <aside className="flex h-screen w-[228px] shrink-0 flex-col border-r border-slate-300/80 bg-[#f6f7fb]">
       <div className="flex items-center px-5 pt-5 pb-4">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-sm font-bold text-white shadow-[0_8px_20px_rgba(168,85,247,0.22)]">
@@ -44,7 +44,7 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
             <p className="text-[16px] font-semibold tracking-tight text-slate-900">
               Beauty Admin
             </p>
-            <p className="text-[11px] text-slate-500">WhatsApp API</p>
+            <p className="text-[11px] text-slate-600">WhatsApp API</p>
           </div>
         </div>
       </div>
@@ -63,22 +63,25 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
                 className={`group flex h-10 items-center gap-3 rounded-2xl px-3 text-[13px] font-medium transition-all ${
                   active
                     ? "bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white shadow-[0_10px_20px_rgba(217,70,239,0.16)]"
-                    : "text-slate-700 hover:bg-white hover:text-slate-950"
+                    : "text-slate-800 hover:bg-white hover:text-slate-950"
                 }`}
               >
                 <Icon
                   size={16}
-                  className={active ? "opacity-100" : "opacity-90 group-hover:opacity-100"}
+                  className={active ? "opacity-100" : "opacity-100 text-slate-700"}
+                  strokeWidth={2}
                 />
-                <span className="truncate">{item.label}</span>
+                <span className={active ? "text-white" : "text-slate-800"}>
+                  {item.label}
+                </span>
               </Link>
             );
           })}
         </div>
       </nav>
 
-      <div className="border-t border-slate-200 p-3">
-        <div className="rounded-[20px] border border-slate-200 bg-white p-3 shadow-[0_8px_18px_rgba(15,23,42,0.04)]">
+      <div className="border-t border-slate-300/80 p-3">
+        <div className="rounded-[20px] border border-slate-300/80 bg-white p-3 shadow-[0_8px_18px_rgba(15,23,42,0.04)]">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-500 text-sm font-semibold text-white">
               AA
@@ -87,7 +90,7 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
               <p className="truncate text-[13px] font-semibold text-slate-900">
                 Aydın Acar
               </p>
-              <p className="text-[12px] font-medium text-emerald-600">1000 kredi</p>
+              <p className="text-[12px] font-medium text-emerald-700">1000 kredi</p>
             </div>
           </div>
         </div>
