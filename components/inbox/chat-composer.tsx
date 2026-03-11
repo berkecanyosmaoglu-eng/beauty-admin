@@ -1,5 +1,5 @@
 import { Image as ImageIcon, Paperclip, Send } from "lucide-react";
-import { InboxConfig } from "./inbox-types";
+import type { InboxConfig } from "./inbox-types";
 
 type ChatComposerProps = {
   config: InboxConfig;
@@ -12,15 +12,15 @@ export default function ChatComposer({ config }: ChatComposerProps) {
       : "bg-gradient-to-br from-emerald-400 to-emerald-500 text-[#041018]";
 
   return (
-    <div className="border-t border-white/6 bg-[#0d1726] px-3 md:px-4 py-3">
+    <div className="border-t border-white/6 bg-[#0d1726] px-3 py-3 md:px-4">
       <div className="mb-2.5 flex flex-wrap gap-2 overflow-x-auto">
-        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 hover:bg-white/10">
+        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 transition hover:bg-white/10">
           Hızlı cevap
         </button>
-        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 hover:bg-white/10">
+        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 transition hover:bg-white/10">
           Şablon ekle
         </button>
-        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 hover:bg-white/10">
+        <button className="whitespace-nowrap rounded-full bg-white/5 px-3 py-1.5 text-[11px] text-zinc-300 transition hover:bg-white/10">
           Not düş
         </button>
       </div>
@@ -28,11 +28,11 @@ export default function ChatComposer({ config }: ChatComposerProps) {
       <div className="flex items-center gap-3 rounded-[18px] border border-white/6 bg-[#0a1320] px-3 py-3">
         {config.variant === "instagram" ? (
           <button className="text-zinc-500 transition hover:text-zinc-300">
-            <ImageIcon size={17} />
+            <ImageIcon size={16} />
           </button>
         ) : (
           <button className="text-zinc-500 transition hover:text-zinc-300">
-            <Paperclip size={17} />
+            <Paperclip size={16} />
           </button>
         )}
 
@@ -42,7 +42,7 @@ export default function ChatComposer({ config }: ChatComposerProps) {
         />
 
         <button className={`rounded-xl p-2.5 transition hover:opacity-90 ${sendButtonClass}`}>
-          <Send size={15} />
+          <Send size={14} />
         </button>
       </div>
     </div>
