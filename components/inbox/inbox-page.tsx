@@ -13,12 +13,12 @@ type InboxPageProps = {
 };
 
 export default function InboxPage({ config }: InboxPageProps) {
-  const initialChat = useMemo<InboxChat>(
-    () => config.chats.find((chat) => chat.active) ?? config.chats[0],
+  const initialChat = useMemo<InboxChat | null>(
+    () => config.chats.find((chat) => chat.active) ?? config.chats[0] ?? null,
     [config.chats]
   );
 
-  const [selectedChat, setSelectedChat] = useState<InboxChat>(initialChat);
+  const [selectedChat, setSelectedChat] = useState<InboxChat | null>(initialChat);
   const [mobileView, setMobileView] = useState<"list" | "chat">("list");
   const [mobileDetailsOpen, setMobileDetailsOpen] = useState(false);
 
@@ -37,7 +37,7 @@ export default function InboxPage({ config }: InboxPageProps) {
       >
         <InboxSidebar
           config={config}
-          selectedChatId={selectedChat.id}
+          selectedChatId={selectedChat?.id ?? ""}
           onSelectChat={handleSelectChat}
         />
       </div>
@@ -47,14 +47,22 @@ export default function InboxPage({ config }: InboxPageProps) {
           mobileView === "chat" ? "flex" : "hidden"
         } min-w-0 flex-1 flex-col bg-[#07111f] md:flex`}
       >
+        {!selectedChat ? (
+          <div className="flex flex-1 items-center justify-center p-6 text-sm text-zinc-400">
+            Bu kanal için gösterilecek kayıt bulunamadı.
+          </div>
+        ) : (
+          <>
         <ChatHeader
           config={config}
-          chat={selectedChat}
+          chat={selectedChat ?? config.chats[0]}
           onBack={() => setMobileView("list")}
           onOpenDetails={() => setMobileDetailsOpen(true)}
         />
         <ChatMessages messages={config.messages} config={config} />
         <ChatComposer config={config} />
+          </>
+        )}
       </div>
 
       <CustomerPanel
