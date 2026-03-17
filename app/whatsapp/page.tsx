@@ -1,11 +1,15 @@
 import AppShell from "@/components/admin/app-shell";
+import { buildInboxConfig } from "@/components/inbox/build-config";
 import InboxPage from "@/components/inbox/inbox-page";
-import { whatsappConfig } from "@/components/inbox/inbox-data";
+import { loadTenantData } from "@/lib/backend";
 
-export default function WhatsAppPage() {
+export default async function WhatsAppPage() {
+  const data = await loadTenantData();
+  const config = buildInboxConfig({ variant: "whatsapp", ...data });
+
   return (
     <AppShell>
-      <InboxPage config={whatsappConfig} />
+      <InboxPage config={config} />
     </AppShell>
   );
 }

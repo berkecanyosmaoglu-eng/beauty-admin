@@ -1,11 +1,15 @@
 import AppShell from "@/components/admin/app-shell";
+import { buildInboxConfig } from "@/components/inbox/build-config";
 import InboxPage from "@/components/inbox/inbox-page";
-import { instagramConfig } from "@/components/inbox/inbox-data";
+import { loadTenantData } from "@/lib/backend";
 
-export default function InstagramPage() {
+export default async function InstagramPage() {
+  const data = await loadTenantData();
+  const config = buildInboxConfig({ variant: "instagram", ...data });
+
   return (
     <AppShell>
-      <InboxPage config={instagramConfig} />
+      <InboxPage config={config} />
     </AppShell>
   );
 }
