@@ -1,12 +1,12 @@
 import AppShell from "@/components/admin/app-shell";
-import { apiGet } from "@/lib/api";
-import type { ReactNode } from "react";
+import {
+  type ApiAppointment,
+  loadTenantData,
+  appointmentDate,
+} from "@/lib/backend";
 import {
   AlertTriangle,
-  ArrowUpRight,
   CalendarDays,
-  CheckCircle2,
-  Clock3,
   MessageCircle,
   Sparkles,
   TrendingUp,
@@ -14,68 +14,6 @@ import {
   Instagram,
   Mail,
 } from "lucide-react";
-
-type ApiAppointment = {
-  id: string;
-  date?: string;
-  startAt?: string;
-  startTime?: string;
-  createdAt?: string;
-  customerName?: string;
-  customerId?: string;
-  serviceName?: string;
-  serviceId?: string;
-  staffName?: string;
-  staffId?: string;
-  status?: string;
-};
-
-type ApiCustomer = {
-  id: string;
-  name?: string;
-};
-
-type ApiStaff = {
-  id: string;
-  name?: string;
-  isActive?: boolean;
-};
-
-type ApiService = {
-  id: string;
-  name?: string;
-};
-
-type LoadResult<T> = {
-  data: T | null;
-  error: string | null;
-};
-
-const tenantId = process.env.NEXT_PUBLIC_TENANT_ID;
-
-async function safeLoad<T>(promise: Promise<T>): Promise<LoadResult<T>> {
-  try {
-    return { data: await promise, error: null };
-  } catch (error) {
-    const message = error instanceof Error ? error.message : "Bilinmeyen API hatası";
-    return { data: null, error: message };
-  }
-}
-
-function asDate(value?: string): Date | null {
-  if (!value) return null;
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? null : date;
-}
-
-function appointmentDate(appointment: ApiAppointment): Date | null {
-  return (
-    asDate(appointment.startAt) ??
-    asDate(appointment.startTime) ??
-    asDate(appointment.date) ??
-    asDate(appointment.createdAt)
-  );
-}
 
 function isSameDay(left: Date, right: Date): boolean {
   return (
@@ -90,67 +28,77 @@ function formatHour(date: Date | null): string {
   return new Intl.DateTimeFormat("tr-TR", { hour: "2-digit", minute: "2-digit" }).format(date);
 }
 
-function formatWeekday(index: number): string {
-  return ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"][index] ?? "-";
+function formatShortDay(date: Date): string {
+  return new Intl.DateTimeFormat("tr-TR", { weekday: "short" }).format(date);
+}
+
+function startOfDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function buildAppointmentLabel(
+  appointment: ApiAppointment,
+  customerById: Map<string, string>,
+  serviceById: Map<string, string>,
+  staffById: Map<string, string>
+) {
+  return {
+    id: appointment.id,
+    time: formatHour(appointmentDate(appointment)),
+    customer:
+      appointment.customerName ??
+      (appointment.customerId ? customerById.get(appointment.customerId) : null) ??
+      "Müşteri bilgisi yok",
+    service:
+      appointment.serviceName ??
+      (appointment.serviceId ? serviceById.get(appointment.serviceId) : null) ??
+      "Hizmet bilgisi yok",
+    staff:
+      appointment.staffName ??
+      (appointment.staffId ? staffById.get(appointment.staffId) : null) ??
+      "Personel bilgisi yok",
+  };
 }
 
 export default async function DashboardPage() {
-  const [appointmentsRes, customersRes, staffRes, servicesRes] = tenantId
-    ? await Promise.all([
-        safeLoad(apiGet<ApiAppointment[]>("/appointments", { tenantId })),
-        safeLoad(apiGet<ApiCustomer[]>("/customers", { tenantId })),
-        safeLoad(apiGet<ApiStaff[]>("/staff", { tenantId })),
-        safeLoad(apiGet<ApiService[]>("/services", { tenantId })),
-      ])
-    : [
-        { data: null, error: "NEXT_PUBLIC_TENANT_ID tanımlı değil." },
-        { data: null, error: "NEXT_PUBLIC_TENANT_ID tanımlı değil." },
-        { data: null, error: "NEXT_PUBLIC_TENANT_ID tanımlı değil." },
-        { data: null, error: "NEXT_PUBLIC_TENANT_ID tanımlı değil." },
-      ];
-
-  const errors = [appointmentsRes.error, customersRes.error, staffRes.error, servicesRes.error].filter(Boolean);
-
-  const appointments = appointmentsRes.data ?? [];
-  const customers = customersRes.data ?? [];
-  const staff = staffRes.data ?? [];
-  const services = servicesRes.data ?? [];
+  const { appointments, customers, staff, services, errors } = await loadTenantData();
 
   const customerById = new Map(customers.map((item) => [item.id, item.name ?? "İsimsiz müşteri"]));
   const staffById = new Map(staff.map((item) => [item.id, item.name ?? "Atanmamış personel"]));
   const serviceById = new Map(services.map((item) => [item.id, item.name ?? "Belirsiz hizmet"]));
 
   const now = new Date();
+  const todayStart = startOfDay(now);
 
   const datedAppointments = appointments
     .map((item) => ({ item, date: appointmentDate(item) }))
     .filter((item) => item.date)
-    .sort((a, b) => (a.date!.getTime() - b.date!.getTime()));
+    .sort((a, b) => a.date!.getTime() - b.date!.getTime());
 
-  const todayAppointmentsCount = datedAppointments.filter((entry) => isSameDay(entry.date!, now)).length;
+  const todayAppointments = datedAppointments
+    .filter((entry) => isSameDay(entry.date!, now))
+    .map(({ item }) => buildAppointmentLabel(item, customerById, serviceById, staffById));
 
-  const upcomingAppointments = datedAppointments
-    .filter((entry) => entry.date! >= now)
-    .slice(0, 5)
-    .map(({ item, date }) => ({
-      id: item.id,
-      time: formatHour(date),
-      customer: item.customerName ?? (item.customerId ? customerById.get(item.customerId) : null) ?? "Müşteri bilgisi yok",
-      service: item.serviceName ?? (item.serviceId ? serviceById.get(item.serviceId) : null) ?? "Hizmet bilgisi yok",
-      staff: item.staffName ?? (item.staffId ? staffById.get(item.staffId) : null) ?? "Personel bilgisi yok",
-    }));
-
-  const weeklyCounts = Array.from({ length: 7 }, () => 0);
-  datedAppointments.forEach(({ date }) => {
-    if (!date) return;
-    const dayDiff = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
-    if (dayDiff >= 0 && dayDiff < 7) {
-      weeklyCounts[date.getDay()] += 1;
-    }
-  });
-  const maxWeekly = Math.max(...weeklyCounts, 1);
-
+  const todayAppointmentsCount = todayAppointments.length;
   const activeStaffCount = staff.filter((member) => member.isActive !== false).length;
+
+  const sevenDaySeries = Array.from({ length: 7 }, (_, index) => {
+    const day = new Date(todayStart);
+    day.setDate(todayStart.getDate() - (6 - index));
+    const nextDay = new Date(day);
+    nextDay.setDate(day.getDate() + 1);
+
+    const count = datedAppointments.filter(
+      ({ date }) => date && date.getTime() >= day.getTime() && date.getTime() < nextDay.getTime()
+    ).length;
+
+    return {
+      label: formatShortDay(day),
+      count,
+    };
+  });
+
+  const maxWeekly = Math.max(...sevenDaySeries.map((item) => item.count), 1);
 
   return (
     <AppShell>
@@ -200,35 +148,27 @@ export default async function DashboardPage() {
           </section>
 
           <section className="rounded-[24px] border border-white/6 bg-white/5 p-5 shadow-[0_12px_32px_rgba(0,0,0,0.18)]">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[12px] text-zinc-400">Kanal Performansı</p>
-                <h2 className="mt-1 text-[20px] font-semibold tracking-tight">Bugünün akışı</h2>
-              </div>
-              <button className="rounded-2xl border border-white/8 bg-white/5 p-2 text-zinc-300 transition hover:bg-white/10">
-                <ArrowUpRight size={16} />
-              </button>
+            <div>
+              <p className="text-[12px] text-zinc-400">Kanal Performansı</p>
+              <h2 className="mt-1 text-[20px] font-semibold tracking-tight">Bugünün akışı</h2>
             </div>
 
             <div className="mt-4 space-y-2.5">
               {[
                 {
                   name: "WhatsApp",
-                  value: "Veri bekleniyor",
                   detail: "Kanal bazlı konuşma endpointi gerekli",
                   accent: "from-emerald-400 to-emerald-500",
                   icon: MessageCircle,
                 },
                 {
                   name: "Instagram",
-                  value: "Veri bekleniyor",
                   detail: "Kanal bazlı DM istatistiği endpointi gerekli",
                   accent: "from-fuchsia-500 via-pink-500 to-orange-400",
                   icon: Instagram,
                 },
                 {
                   name: "Mail",
-                  value: "Veri bekleniyor",
                   detail: "Mail konuşma/list endpointi gerekli",
                   accent: "from-cyan-400 to-blue-500",
                   icon: Mail,
@@ -243,7 +183,7 @@ export default async function DashboardPage() {
                       </div>
                       <div>
                         <p className="text-[13px] text-zinc-300">{channel.name}</p>
-                        <p className="mt-1 text-[20px] font-semibold leading-none">{channel.value}</p>
+                        <p className="mt-1 text-[20px] font-semibold leading-none">Veri yok</p>
                         <p className="mt-2 text-[12px] text-zinc-500">{channel.detail}</p>
                       </div>
                     </div>
@@ -312,21 +252,21 @@ export default async function DashboardPage() {
           <section className="rounded-[24px] border border-white/6 bg-white/5 p-5 shadow-[0_12px_30px_rgba(0,0,0,0.18)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-[12px] text-zinc-400">Yaklaşan Randevular</p>
+                <p className="text-[12px] text-zinc-400">Randevular</p>
                 <h2 className="mt-1 text-[20px] font-semibold tracking-tight">Bugün sıradakiler</h2>
               </div>
               <div className="rounded-full bg-white/5 px-3 py-1 text-[11px] text-zinc-300">
-                {upcomingAppointments.length} kayıt
+                {todayAppointments.length} kayıt
               </div>
             </div>
 
-            {upcomingAppointments.length === 0 ? (
+            {todayAppointments.length === 0 ? (
               <div className="mt-4 rounded-[20px] border border-dashed border-white/10 bg-[#0d1726] p-4 text-sm text-zinc-400">
-                Yaklaşan randevu bulunamadı veya randevu tarih alanı endpointte dönmüyor.
+                Bugün için randevu bulunamadı veya tarih alanı eksik.
               </div>
             ) : (
               <div className="mt-4 space-y-2.5">
-                {upcomingAppointments.map((item) => (
+                {todayAppointments.map((item) => (
                   <div key={item.id} className="rounded-[20px] border border-white/6 bg-[#0d1726] p-3.5">
                     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                       <div className="flex items-center gap-3.5">
@@ -341,10 +281,6 @@ export default async function DashboardPage() {
                           </p>
                         </div>
                       </div>
-
-                      <button className="rounded-2xl border border-white/6 bg-white/5 px-4 py-2 text-[12px] text-zinc-300 transition hover:bg-white/10">
-                        Detay
-                      </button>
                     </div>
                   </div>
                 ))}
@@ -374,26 +310,13 @@ export default async function DashboardPage() {
                 <p className="text-[12px] text-zinc-400">Son Aktiviteler</p>
                 <h2 className="mt-1 text-[20px] font-semibold tracking-tight">Sistem hareketleri</h2>
               </div>
-              <div className="rounded-full bg-white/5 px-3 py-1 text-[11px] text-zinc-300">
-                canlı veri
+              <div className="rounded-full bg-amber-500/10 px-3 py-1 text-[11px] text-amber-300">
+                endpoint gerekli
               </div>
             </div>
 
-            <div className="mt-4 space-y-2.5">
-              {[
-                `${todayAppointmentsCount} adet bugünkü randevu tespit edildi.`,
-                `${customers.length} müşteri kaydı dashboarda yansıdı.`,
-                `${activeStaffCount} personel aktif olarak listeleniyor.`,
-              ].map((item) => (
-                <div key={item} className="rounded-[20px] border border-white/6 bg-[#0d1726] p-3.5">
-                  <div className="flex items-start gap-3">
-                    <div className="mt-0.5 text-emerald-400">
-                      <CheckCircle2 size={15} />
-                    </div>
-                    <p className="text-[13px] leading-6 text-zinc-300">{item}</p>
-                  </div>
-                </div>
-              ))}
+            <div className="mt-4 rounded-[20px] border border-dashed border-white/10 bg-[#0d1726] p-4 text-[13px] leading-6 text-zinc-400">
+              Sistem aktivite akışı için audit/log endpointi gerekli.
             </div>
           </section>
         </div>
@@ -411,13 +334,13 @@ export default async function DashboardPage() {
             </div>
 
             <div className="mt-6 flex h-[240px] items-end gap-3">
-              {weeklyCounts.map((count, dayIndex) => (
-                <div key={dayIndex} className="flex flex-1 flex-col items-center gap-2.5">
+              {sevenDaySeries.map((item) => (
+                <div key={item.label} className="flex flex-1 flex-col items-center gap-2.5">
                   <div
                     className="w-full rounded-t-[18px] bg-gradient-to-t from-fuchsia-500 via-cyan-400 to-emerald-400 shadow-[0_8px_16px_rgba(0,0,0,0.16)]"
-                    style={{ height: `${Math.max((count / maxWeekly) * 180, 10)}px` }}
+                    style={{ height: `${Math.max((item.count / maxWeekly) * 180, 10)}px` }}
                   />
-                  <span className="text-[11px] text-zinc-500">{formatWeekday(dayIndex)}</span>
+                  <span className="text-[11px] text-zinc-500">{item.label}</span>
                 </div>
               ))}
             </div>
@@ -429,31 +352,13 @@ export default async function DashboardPage() {
                 <p className="text-[12px] text-zinc-400">Bugünkü Odak</p>
                 <h2 className="mt-1 text-[20px] font-semibold tracking-tight">Öne çıkan öneriler</h2>
               </div>
-              <div className="rounded-full bg-amber-500/10 px-3 py-1 text-[11px] text-amber-300">dikkat</div>
+              <div className="rounded-full bg-amber-500/10 px-3 py-1 text-[11px] text-amber-300">
+                veri yok
+              </div>
             </div>
 
-            <div className="mt-4 space-y-3">
-              <FocusCard
-                icon={<Clock3 size={16} />}
-                title="Takvim doğruluğunu artır"
-                text="Randevu kayıtlarında startAt/date alanını zorunlu tutmak trend ve liste kalitesini yükseltir."
-                wrapper="border-emerald-400/10 bg-emerald-500/5"
-                iconWrap="bg-emerald-500/15 text-emerald-300"
-              />
-              <FocusCard
-                icon={<Instagram size={16} />}
-                title="Kanal metrikleri eksik"
-                text="WhatsApp/Instagram/Mail için ayrı konuşma endpointleri eklenirse panel tamamen dolacaktır."
-                wrapper="border-fuchsia-400/10 bg-fuchsia-500/5"
-                iconWrap="bg-fuchsia-500/15 text-fuchsia-300"
-              />
-              <FocusCard
-                icon={<ArrowUpRight size={16} />}
-                title="Dönüşüm metriği için backend desteği"
-                text="Lead -> randevu dönüşümü için lead kaynağı ve durum alanları API response'unda olmalı."
-                wrapper="border-cyan-400/10 bg-cyan-500/5"
-                iconWrap="bg-cyan-500/15 text-cyan-300"
-              />
+            <div className="mt-4 rounded-[20px] border border-dashed border-white/10 bg-[#0d1726] p-4 text-[13px] leading-6 text-zinc-400">
+              Öneri üretebilmek için performans/öneri endpointi gerekli.
             </div>
           </section>
         </div>
@@ -478,32 +383,6 @@ function MiniStat({
       <p className="text-[11px] text-zinc-400">{label}</p>
       <p className="mt-2 text-[28px] font-semibold tracking-tight">{value}</p>
       <p className={`mt-1 text-[11px] font-medium ${noteClass}`}>{note}</p>
-    </div>
-  );
-}
-
-function FocusCard({
-  icon,
-  title,
-  text,
-  wrapper,
-  iconWrap,
-}: {
-  icon: ReactNode;
-  title: string;
-  text: string;
-  wrapper: string;
-  iconWrap: string;
-}) {
-  return (
-    <div className={`rounded-[20px] border p-4 ${wrapper}`}>
-      <div className="flex items-center gap-3">
-        <div className={`rounded-2xl p-2.5 ${iconWrap}`}>{icon}</div>
-        <div>
-          <p className="text-[14px] font-semibold">{title}</p>
-          <p className="mt-1 text-[13px] leading-6 text-zinc-400">{text}</p>
-        </div>
-      </div>
     </div>
   );
 }
