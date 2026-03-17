@@ -1,8 +1,12 @@
 import AppShell from "@/components/admin/app-shell";
 import {
   type ApiAppointment,
+  type ApiActivityFeedItem,
+  type ApiChannelPerformanceItem,
   loadTenantData,
   appointmentDate,
+  parseDate,
+  formatDateTime,
 } from "@/lib/backend";
 import {
   AlertTriangle,
@@ -60,8 +64,31 @@ function buildAppointmentLabel(
   };
 }
 
+function activityItemDate(item: ApiActivityFeedItem): Date | null {
+  return parseDate(item.createdAt) ?? parseDate(item.timestamp);
+}
+
+function activityText(item: ApiActivityFeedItem): { title: string; detail: string } {
+  const title = item.title ?? item.action ?? "Sistem aktivitesi";
+  const detail = item.message ?? (item.status ? `Durum: ${item.status}` : "Detay bilgisi yok");
+  return { title, detail };
+}
+
+function channelName(item: ApiChannelPerformanceItem): string {
+  return item.name ?? item.channel ?? item.type ?? "Kanal";
+}
+
+function channelPrimaryValue(item: ApiChannelPerformanceItem): number | null {
+  const fields = [item.value, item.total, item.count, item.conversations, item.messages, item.leads];
+  for (const value of fields) {
+    if (typeof value === "number" && Number.isFinite(value)) return value;
+  }
+  return null;
+}
+
 export default async function DashboardPage() {
-  const { appointments, customers, staff, services, errors } = await loadTenantData();
+  const { appointments, customers, staff, services, activityFeed, channelPerformance, errors } =
+    await loadTenantData();
 
   const customerById = new Map(customers.map((item) => [item.id, item.name ?? "İsimsiz müşteri"]));
   const staffById = new Map(staff.map((item) => [item.id, item.name ?? "Atanmamış personel"]));
@@ -99,6 +126,43 @@ export default async function DashboardPage() {
   });
 
   const maxWeekly = Math.max(...sevenDaySeries.map((item) => item.count), 1);
+
+  const normalizedChannelPerformance = channelPerformance.map((item, index) => {
+    const name = channelName(item);
+    const value = channelPrimaryValue(item);
+    const conversionRate = typeof item.conversionRate === "number" ? item.conversionRate : null;
+
+    const accent =
+      name.toLowerCase().includes("instagram")
+        ? "from-fuchsia-500 via-pink-500 to-orange-400"
+        : name.toLowerCase().includes("mail")
+          ? "from-cyan-400 to-blue-500"
+          : "from-emerald-400 to-emerald-500";
+
+    const icon =
+      name.toLowerCase().includes("instagram")
+        ? Instagram
+        : name.toLowerCase().includes("mail")
+          ? Mail
+          : MessageCircle;
+
+    return {
+      id: item.id ?? `${name}-${index}`,
+      name,
+      value,
+      conversionRate,
+      accent,
+      icon,
+    };
+  });
+
+  const sortedActivityFeed = [...activityFeed]
+    .sort((a, b) => {
+      const aTime = activityItemDate(a)?.getTime() ?? 0;
+      const bTime = activityItemDate(b)?.getTime() ?? 0;
+      return bTime - aTime;
+    })
+    .slice(0, 5);
 
   return (
     <AppShell>
@@ -154,26 +218,12 @@ export default async function DashboardPage() {
             </div>
 
             <div className="mt-4 space-y-2.5">
-              {[
-                {
-                  name: "WhatsApp",
-                  detail: "Kanal bazlı konuşma endpointi gerekli",
-                  accent: "from-emerald-400 to-emerald-500",
-                  icon: MessageCircle,
-                },
-                {
-                  name: "Instagram",
-                  detail: "Kanal bazlı DM istatistiği endpointi gerekli",
-                  accent: "from-fuchsia-500 via-pink-500 to-orange-400",
-                  icon: Instagram,
-                },
-                {
-                  name: "Mail",
-                  detail: "Mail konuşma/list endpointi gerekli",
-                  accent: "from-cyan-400 to-blue-500",
-                  icon: Mail,
-                },
-              ].map((channel) => {
+              {normalizedChannelPerformance.length === 0 ? (
+                <div className="rounded-[20px] border border-dashed border-white/10 bg-[#0d1726] p-4 text-[13px] leading-6 text-zinc-400">
+                  Kanal performansı verisi bulunamadı.
+                </div>
+              ) : (
+                normalizedChannelPerformance.map((channel) => {
                 const Icon = channel.icon;
                 return (
                   <div key={channel.name} className="rounded-[20px] border border-white/6 bg-[#0d1726] p-3.5">
@@ -183,13 +233,20 @@ export default async function DashboardPage() {
                       </div>
                       <div>
                         <p className="text-[13px] text-zinc-300">{channel.name}</p>
-                        <p className="mt-1 text-[20px] font-semibold leading-none">Veri yok</p>
-                        <p className="mt-2 text-[12px] text-zinc-500">{channel.detail}</p>
+                        <p className="mt-1 text-[20px] font-semibold leading-none">
+                          {channel.value ?? "Veri yok"}
+                        </p>
+                        <p className="mt-2 text-[12px] text-zinc-500">
+                          {channel.conversionRate !== null
+                            ? `Dönüşüm: %${channel.conversionRate}`
+                            : "Dönüşüm bilgisi yok"}
+                        </p>
                       </div>
                     </div>
                   </div>
                 );
-              })}
+                })
+              )}
             </div>
           </section>
         </div>
@@ -310,14 +367,33 @@ export default async function DashboardPage() {
                 <p className="text-[12px] text-zinc-400">Son Aktiviteler</p>
                 <h2 className="mt-1 text-[20px] font-semibold tracking-tight">Sistem hareketleri</h2>
               </div>
-              <div className="rounded-full bg-amber-500/10 px-3 py-1 text-[11px] text-amber-300">
-                endpoint gerekli
+              <div className="rounded-full bg-white/5 px-3 py-1 text-[11px] text-zinc-300">
+                {sortedActivityFeed.length} kayıt
               </div>
             </div>
 
-            <div className="mt-4 rounded-[20px] border border-dashed border-white/10 bg-[#0d1726] p-4 text-[13px] leading-6 text-zinc-400">
-              Sistem aktivite akışı için audit/log endpointi gerekli.
-            </div>
+            {sortedActivityFeed.length === 0 ? (
+              <div className="mt-4 rounded-[20px] border border-dashed border-white/10 bg-[#0d1726] p-4 text-[13px] leading-6 text-zinc-400">
+                Sistem aktivitesi bulunamadı.
+              </div>
+            ) : (
+              <div className="mt-4 space-y-2.5">
+                {sortedActivityFeed.map((item, index) => {
+                  const content = activityText(item);
+                  const date = activityItemDate(item);
+                  return (
+                    <div
+                      key={item.id ?? `${content.title}-${index}`}
+                      className="rounded-[20px] border border-white/6 bg-[#0d1726] p-3.5"
+                    >
+                      <p className="text-[13px] font-semibold text-zinc-200">{content.title}</p>
+                      <p className="mt-1 text-[12px] text-zinc-400">{content.detail}</p>
+                      <p className="mt-2 text-[11px] text-zinc-500">{formatDateTime(date)}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </section>
         </div>
 

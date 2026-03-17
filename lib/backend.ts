@@ -39,7 +39,33 @@ export type TenantData = {
   customers: ApiCustomer[];
   staff: ApiStaff[];
   services: ApiService[];
+  activityFeed: ApiActivityFeedItem[];
+  channelPerformance: ApiChannelPerformanceItem[];
   errors: string[];
+};
+
+export type ApiActivityFeedItem = {
+  id: string;
+  title?: string;
+  message?: string;
+  action?: string;
+  status?: string;
+  createdAt?: string;
+  timestamp?: string;
+};
+
+export type ApiChannelPerformanceItem = {
+  id?: string;
+  name?: string;
+  channel?: string;
+  type?: string;
+  value?: number;
+  total?: number;
+  count?: number;
+  conversations?: number;
+  messages?: number;
+  leads?: number;
+  conversionRate?: number;
 };
 
 export function getTenantId(): string | null {
@@ -55,6 +81,21 @@ async function safeGet<T>(promise: Promise<T>): Promise<{ data: T | null; error:
   }
 }
 
+function normalizeList<T>(value: unknown): T[] {
+  if (Array.isArray(value)) return value as T[];
+  if (!value || typeof value !== "object") return [];
+
+  const candidateKeys = ["data", "items", "results", "records", "activityFeed", "channels"];
+  for (const key of candidateKeys) {
+    const candidate = (value as Record<string, unknown>)[key];
+    if (Array.isArray(candidate)) {
+      return candidate as T[];
+    }
+  }
+
+  return [];
+}
+
 export async function loadTenantData(): Promise<TenantData> {
   const tenantId = getTenantId();
   if (!tenantId) {
@@ -63,25 +104,36 @@ export async function loadTenantData(): Promise<TenantData> {
       customers: [],
       staff: [],
       services: [],
+      activityFeed: [],
+      channelPerformance: [],
       errors: ["NEXT_PUBLIC_TENANT_ID tanımlı değil."],
     };
   }
 
-  const [appointmentsRes, customersRes, staffRes, servicesRes] = await Promise.all([
+  const [appointmentsRes, customersRes, staffRes, servicesRes, activityFeedRes, channelPerformanceRes] = await Promise.all([
     safeGet(apiGet<ApiAppointment[]>("/appointments", { tenantId })),
     safeGet(apiGet<ApiCustomer[]>("/customers", { tenantId })),
     safeGet(apiGet<ApiStaff[]>("/staff", { tenantId })),
     safeGet(apiGet<ApiService[]>("/services", { tenantId })),
+    safeGet(apiGet<unknown>("/admin/activity-feed", { tenantId })),
+    safeGet(apiGet<unknown>("/admin/channel-performance", { tenantId })),
   ]);
 
   return {
-    appointments: appointmentsRes.data ?? [],
-    customers: customersRes.data ?? [],
-    staff: staffRes.data ?? [],
-    services: servicesRes.data ?? [],
-    errors: [appointmentsRes.error, customersRes.error, staffRes.error, servicesRes.error].filter(
-      Boolean
-    ) as string[],
+    appointments: normalizeList<ApiAppointment>(appointmentsRes.data),
+    customers: normalizeList<ApiCustomer>(customersRes.data),
+    staff: normalizeList<ApiStaff>(staffRes.data),
+    services: normalizeList<ApiService>(servicesRes.data),
+    activityFeed: normalizeList<ApiActivityFeedItem>(activityFeedRes.data),
+    channelPerformance: normalizeList<ApiChannelPerformanceItem>(channelPerformanceRes.data),
+    errors: [
+      appointmentsRes.error,
+      customersRes.error,
+      staffRes.error,
+      servicesRes.error,
+      activityFeedRes.error,
+      channelPerformanceRes.error,
+    ].filter(Boolean) as string[],
   };
 }
 
